@@ -4,6 +4,7 @@
 //   new FormLengthMonitor($$('form input[id$=meta_keywords]')[0], $$('form label[for$=meta_keywords] span')[0]);
 
 // Used to update a DOM element with the length of a field
+// The maxlength is determined by the maxlength attribute on the field element
 var FormLengthMonitor = Class.create({
   
   initialize: function(field, monitor, colors){

@@ -16,9 +16,12 @@ var FormLengthMonitor = Class.create({
       warning: '#f97c11',
       max: '#f00'
     };
-    this.maxlength = this.field.readAttribute('maxlength');
+    this.state = "original";
+    this.threshhold = 20;
+    this.maxlength = this.field.readAttribute('data-maxlength');
     this.update();
     this.field.observe('keyup', this.update.bind(this));
+    this.setColor();
   },
   
   update: function(){
@@ -28,13 +31,21 @@ var FormLengthMonitor = Class.create({
   },
   
   checkLength: function(){
-    if (this.length < this.maxlength - 20) {
-      this.monitor.setStyle({ color: this.colors.original });
-    } else if ((this.length > this.maxlength - 20) && (this.length != this.maxlength)) {
-      this.monitor.setStyle({ color: this.colors.warning });
-    } else if (this.length == this.maxlength) {
-      this.monitor.setStyle({ color: this.colors.max });
+    if (this.length < this.maxlength) {
+      var newState = (this.length < this.maxlength - this.threshhold)? "original" : "warning";
+    } else {
+      var newState = "max";
     }
+
+    if (newState != this.state){
+      this.state = newState;
+      this.setColor();
+    }
+    
+  },
+
+  setColor: function(){
+    this.monitor.setStyle({ color: this.colors[this.state] });
   }
   
 });
